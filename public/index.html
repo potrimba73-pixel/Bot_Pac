@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAC Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">🚛</span>
+        <div>
+          <h1>PAC Dashboard</h1>
+          <small>Portugal Alfa Community</small>
+        </div>
+      </div>
+      <nav>
+        <div class="nav-section">Mensagens</div>
+        <button class="nav-btn active" data-tab="entrada">
+          <span>🎉</span> Entrada
+        </button>
+        <button class="nav-btn" data-tab="saida">
+          <span>👋</span> Saída
+        </button>
+        <div class="nav-section">Sistema</div>
+        <button class="nav-btn" data-tab="placeholders">
+          <span>🏷️</span> Placeholders
+        </button>
+        <button class="nav-btn" data-tab="exportar">
+          <span>📤</span> Exportar / Importar
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="btnSave" class="btn-primary">💾 Guardar Alterações</button>
+        <button id="btnReset" class="btn-danger">🔄 Resetar Defaults</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Status Bar -->
+      <div class="status-bar" id="statusBar">
+        <span id="botStatus">⏳ A verificar status do bot...</span>
+      </div>
+
+      <!-- ABA: ENTRADA -->
+      <section class="tab-panel active" id="tab-entrada">
+        <div class="panel-header">
+          <h2>🎉 Entrada</h2>
+          <p>Configura a mensagem de boas-vindas com imagem gerada</p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Config Mensagem -->
+          <div class="card">
+            <h3>⚙️ Configuração da Mensagem</h3>
+            <label class="toggle">
+              <input type="checkbox" id="entEnabled">
+              <span class="slider"></span>
+              Ativar mensagem de entrada
+            </label>
+
+            <label>Canal (ID)</label>
+            <input type="text" id="entChannel" placeholder="1146439899063529582">
+
+            <label>Mensagem</label>
+            <textarea id="entMessage" rows="3" placeholder="Entrou um novo membro..."></textarea>
+            <small class="hint">Placeholders: {user} {username} {userid} {membercount} {server} {rules}</small>
+
+            <label class="toggle">
+              <input type="checkbox" id="entEmbed">
+              <span class="slider"></span>
+              Enviar como Embed
+            </label>
+
+            <label>Cor do Embed</label>
+            <input type="color" id="entEmbedColor" value="#57f287">
+
+            <div class="test-box">
+              <label>Username de teste</label>
+              <input type="text" id="entTestUser" value="TestUser" placeholder="Nome para teste">
+              <button id="btnTestEntrada" class="btn-test">🧪 Enviar Teste no Discord</button>
+            </div>
+          </div>
+
+          <!-- Config Imagem -->
+          <div class="card">
+            <h3>🖼️ Configuração da Imagem</h3>
+            <label class="toggle">
+              <input type="checkbox" id="entImgEnabled">
+              <span class="slider"></span>
+              Gerar imagem de boas-vindas
+            </label>
+
+            <label>Imagem de Fundo (URL)</label>
+            <input type="text" id="entBgUrl" placeholder="https://...">
+            <small class="hint">Deixa vazio para usar cor de fundo escura</small>
+
+            <label>Texto de Boas-Vindas</label>
+            <input type="text" id="entWelcomeText" value="Bem-Vindo a Portugal Alfa Community">
+
+            <label>Layout</label>
+            <select id="entLayout">
+              <option value="classic">Clássico</option>
+              <option value="modern">Moderno</option>
+            </select>
+
+            <label>Forma do Avatar</label>
+            <select id="entAvatarShape">
+              <option value="circle">Círculo</option>
+              <option value="rounded">Arredondado</option>
+              <option value="square">Quadrado</option>
+            </select>
+
+            <div class="color-row">
+              <div><label>Cor Nome</label><input type="color" id="entNameColor" value="#FFFFFF"></div>
+              <div><label>Cor Boas-Vindas</label><input type="color" id="entWelcomeColor" value="#FFD700"></div>
+            </div>
+            <div class="color-row">
+              <div><label>Cor Borda</label><input type="color" id="entBorderColor" value="#FFFFFF"></div>
+              <div><label>Cor Overlay</label><input type="color" id="entOverlayColor" value="#000000"></div>
+            </div>
+
+            <label>Opacidade Overlay</label>
+            <input type="range" id="entOverlayOp" min="0" max="100" value="35">
+            <small class="hint" id="opVal">35%</small>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="card preview-card">
+          <h3>👁️ Preview — Simulação de como aparece no Discord</h3>
+          <div class="discord-preview" id="entPreview">
+            <div class="discord-msg">
+              <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="d-avatar">
+              <div class="d-content">
+                <div class="d-header">
+                  <span class="d-name">PAC Bot</span>
+                  <span class="d-bot">APP</span>
+                  <span class="d-time">Hoje às 16:42</span>
+                </div>
+                <div class="d-text" id="entPreviewText">Entrou um novo membro, @user !! ...</div>
+                <div class="d-image" id="entPreviewImg">
+                  <div class="welcome-img-preview">
+                    <div class="w-bg"></div>
+                    <div class="w-overlay"></div>
+                    <div class="w-avatar">T</div>
+                    <div class="w-text">
+                      <div class="w-username" id="prevUsername">TestUser</div>
+                      <div class="w-welcome" id="prevWelcome">Bem-Vindo a Portugal Alfa Community</div>
+                      <div class="w-count">Membro nº 514</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABA: SAÍDA -->
+      <section class="tab-panel" id="tab-saida">
+        <div class="panel-header">
+          <h2>👋 Saída</h2>
+          <p>Configura a mensagem de despedida</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>⚙️ Configuração da Mensagem</h3>
+            <label class="toggle">
+              <input type="checkbox" id="saiEnabled">
+              <span class="slider"></span>
+              Ativar mensagem de saída
+            </label>
+
+            <label>Canal (ID)</label>
+            <input type="text" id="saiChannel" placeholder="1146439899063529582">
+
+            <label>Mensagem</label>
+            <textarea id="saiMessage" rows="3"></textarea>
+            <small class="hint">Placeholders: {username} {membercount} {server}</small>
+
+            <label class="toggle">
+              <input type="checkbox" id="saiEmbed">
+              <span class="slider"></span>
+              Enviar como Embed
+            </label>
+
+            <label>Cor do Embed</label>
+            <input type="color" id="saiEmbedColor" value="#2F3136">
+
+            <div class="test-box">
+              <label>Username de teste</label>
+              <input type="text" id="saiTestUser" value="TestUser">
+              <button id="btnTestSaida" class="btn-test">🧪 Enviar Teste no Discord</button>
+            </div>
+          </div>
+
+          <div class="card preview-card">
+            <h3>👁️ Preview</h3>
+            <div class="discord-preview">
+              <div class="discord-msg">
+                <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="d-avatar">
+                <div class="d-content">
+                  <div class="d-header">
+                    <span class="d-name">PAC Bot</span>
+                    <span class="d-bot">APP</span>
+                    <span class="d-time">Hoje às 16:42</span>
+                  </div>
+                  <div class="d-text" id="saiPreviewText">Oh, o TestUser saiu do servidor...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABA: PLACEHOLDERS -->
+      <section class="tab-panel" id="tab-placeholders">
+        <div class="panel-header">
+          <h2>🏷️ Placeholders Disponíveis</h2>
+        </div>
+        <div class="card">
+          <div class="placeholder-grid">
+            <div class="ph-item"><code>{user}</code><span>Menciona o utilizador (@user)</span></div>
+            <div class="ph-item"><code>{username}</code><span>Nome do utilizador</span></div>
+            <div class="ph-item"><code>{userid}</code><span>ID do utilizador</span></div>
+            <div class="ph-item"><code>{membercount}</code><span>Total de membros no servidor</span></div>
+            <div class="ph-item"><code>{server}</code><span>Nome do servidor</span></div>
+            <div class="ph-item"><code>{rules}</code><span>Menciona canal de regras</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABA: EXPORTAR -->
+      <section class="tab-panel" id="tab-exportar">
+        <div class="panel-header">
+          <h2>📤 Exportar / Importar</h2>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>📋 Exportar Config</h3>
+            <p>Copia este JSON para o ficheiro <code>config.json</code> do teu bot:</p>
+            <textarea id="exportArea" rows="15" readonly></textarea>
+            <button id="btnCopy" class="btn-primary">📋 Copiar JSON</button>
+          </div>
+          <div class="card">
+            <h3>📥 Importar Config</h3>
+            <p>Cole o JSON aqui para carregar configurações:</p>
+            <textarea id="importArea" rows="10" placeholder="Cole o JSON aqui..."></textarea>
+            <button id="btnImport" class="btn-primary">📥 Importar</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
