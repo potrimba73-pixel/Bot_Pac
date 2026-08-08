@@ -11,9 +11,18 @@ const PORT = process.env.PORT || 3000;
 const TOKEN = process.env.TOKEN;
 const CONFIG_PATH = path.join(__dirname, 'config.json');
 
+// Caminho absoluto para a pasta public
+const PUBLIC_DIR = path.join(__dirname, 'public');
+
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static('public'));
+app.use(express.static(PUBLIC_DIR));
+
+console.log('=== PAC Dashboard iniciado ===');
+console.log('PORT:', PORT);
+console.log('TOKEN:', TOKEN ? 'configurado ✅' : 'NÃO configurado ❌');
+console.log('PUBLIC_DIR:', PUBLIC_DIR);
+console.log('PUBLIC exists:', fs.existsSync(PUBLIC_DIR));
 
 // Config default
 const defaultConfig = {
@@ -294,6 +303,16 @@ app.post('/api/test-leave', async (req, res) => {
     res.json({ success: true, message: 'Mensagem de saída enviada!' });
   } catch (e) {
     res.status(500).json({ error: e.message });
+  }
+});
+
+// Fallback: serve index.html para qualquer rota (SPA)
+app.get('*', (req, res) => {
+  const indexPath = path.join(PUBLIC_DIR, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('index.html não encontrado em: ' + indexPath);
   }
 });
 
