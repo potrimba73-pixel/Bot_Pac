@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAC Dashboard Pro</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo"><span class="logo-icon">🚛</span><div><h1>PAC Dashboard</h1><small>Portugal Alfa Community</small></div></div>
+    <nav>
+      <div class="nav-section">Mensagens</div>
+      <button class="nav-btn active" data-tab="entrada"><span>🎉</span> Entrada</button>
+      <button class="nav-btn" data-tab="saida"><span>👋</span> Saída</button>
+      <div class="nav-section">Editor</div>
+      <button class="nav-btn" data-tab="editor"><span>🎨</span> Editor Visual</button>
+      <div class="nav-section">Sistema</div>
+      <button class="nav-btn" data-tab="placeholders"><span>🏷️</span> Placeholders</button>
+      <button class="nav-btn" data-tab="exportar"><span>📤</span> Exportar</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button id="btnSave" class="btn-primary">💾 Guardar</button>
+      <button id="btnReset" class="btn-danger">🔄 Resetar</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="status-bar" id="statusBar"><span id="botStatus">⏳ A verificar...</span></div>
+
+    <section class="tab-panel active" id="tab-entrada">
+      <div class="panel-header"><h2>🎉 Entrada</h2><p>Configura a mensagem de boas-vindas</p></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>⚙️ Mensagem</h3>
+          <label class="toggle"><input type="checkbox" id="entEnabled"><span class="slider"></span>Ativar</label>
+          <label>Canal (ID)</label><input type="text" id="entChannel">
+          <label>Mensagem</label><textarea id="entMessage" rows="3"></textarea>
+          <small class="hint">{user} {username} {userid} {membercount} {server} {rules}</small>
+          <label class="toggle"><input type="checkbox" id="entEmbed"><span class="slider"></span>Enviar como Embed</label>
+          <label>Cor Embed</label><input type="color" id="entEmbedColor">
+          <div class="test-box">
+            <label>Username teste</label><input type="text" id="entTestUser" value="TestUser">
+            <button id="btnTestEntrada" class="btn-test">🧪 Enviar Teste no Discord</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🖼️ Imagem</h3>
+          <label class="toggle"><input type="checkbox" id="entImgEnabled"><span class="slider"></span>Gerar imagem</label>
+          <label>Background URL</label><input type="text" id="entBgUrl" placeholder="https://...">
+          <label>Cor de Fundo (se sem URL)</label><input type="color" id="entBgColor" value="#1a1a2e">
+          <label>Cor Overlay</label><input type="color" id="entOverlayColor" value="#000000">
+          <label>Opacidade Overlay</label><input type="range" id="entOverlayOp" min="0" max="100"><small id="opVal">35%</small>
+          <div style="margin-top:12px;padding:10px;background:#1a1a2e;border-radius:8px;">
+            <p style="font-size:12px;color:#888;margin-bottom:8px;">🎨 Vai ao separador <strong>Editor Visual</strong> para posicionar texto e avatar!</p>
+          </div>
+        </div>
+      </div>
+      <div class="card preview-card">
+        <h3>👁️ Preview Discord</h3>
+        <div class="discord-preview" id="entPreview">
+          <div class="discord-msg">
+            <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="d-avatar">
+            <div class="d-content">
+              <div class="d-header"><span class="d-name">PAC Bot</span><span class="d-bot">APP</span><span class="d-time">Hoje às 16:42</span></div>
+              <div class="d-text" id="entPreviewText"></div>
+              <div class="d-image" id="entPreviewImg"><canvas id="previewCanvas" width="520" height="260"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-saida">
+      <div class="panel-header"><h2>👋 Saída</h2></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>⚙️ Mensagem</h3>
+          <label class="toggle"><input type="checkbox" id="saiEnabled"><span class="slider"></span>Ativar</label>
+          <label>Canal (ID)</label><input type="text" id="saiChannel">
+          <label>Mensagem</label><textarea id="saiMessage" rows="3"></textarea>
+          <label class="toggle"><input type="checkbox" id="saiEmbed"><span class="slider"></span>Enviar como Embed</label>
+          <label>Cor Embed</label><input type="color" id="saiEmbedColor">
+          <div class="test-box">
+            <label>Username teste</label><input type="text" id="saiTestUser" value="TestUser">
+            <button id="btnTestSaida" class="btn-test">🧪 Enviar Teste no Discord</button>
+          </div>
+        </div>
+        <div class="card preview-card">
+          <h3>👁️ Preview</h3>
+          <div class="discord-preview">
+            <div class="discord-msg">
+              <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="d-avatar">
+              <div class="d-content">
+                <div class="d-header"><span class="d-name">PAC Bot</span><span class="d-bot">APP</span><span class="d-time">Hoje às 16:42</span></div>
+                <div class="d-text" id="saiPreviewText"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-editor">
+      <div class="panel-header"><h2>🎨 Editor Visual</h2><p>Arrasta os elementos para posicionar. Clica para editar propriedades.</p></div>
+      <div class="editor-layout">
+        <div class="editor-canvas-wrap">
+          <div class="editor-toolbar">
+            <button id="addText" class="btn-sm">➕ Texto</button>
+            <button id="delEl" class="btn-sm btn-danger">🗑️ Eliminar</button>
+            <button id="resetPos" class="btn-sm">↩️ Reset</button>
+            <span style="color:#888;font-size:12px;margin-left:auto;">🖱️ Arrasta | ✏️ Clica para editar</span>
+          </div>
+          <div class="canvas-container" id="canvasContainer">
+            <canvas id="editorCanvas" width="1024" height="500"></canvas>
+            <div id="selectionBox" class="selection-box"></div>
+          </div>
+        </div>
+        <div class="editor-props" id="editorProps">
+          <h3>🔧 Propriedades</h3>
+          <p class="no-selection" id="noSel">Clica num elemento no canvas para editar</p>
+          <div class="prop-form" id="propForm" style="display:none;">
+            <label>ID</label><input type="text" id="pId" readonly>
+            <label>Tipo</label><input type="text" id="pType" readonly>
+            <label>Texto</label><input type="text" id="pText">
+            <div class="prop-row">
+              <div><label>X</label><input type="number" id="pX"></div>
+              <div><label>Y</label><input type="number" id="pY"></div>
+            </div>
+            <div class="prop-row">
+              <div><label>Tamanho/Fonte</label><input type="number" id="pSize"></div>
+              <div><label>Largura Borda</label><input type="number" id="pBorderW"></div>
+            </div>
+            <label>Cor</label><input type="color" id="pColor">
+            <label>Cor Borda</label><input type="color" id="pBorderColor">
+            <label>Fonte</label>
+            <select id="pFont">
+              <option value="sans-serif">Sans-Serif</option>
+              <option value="serif">Serif</option>
+              <option value="monospace">Monospace</option>
+              <option value="Arial">Arial</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Impact">Impact</option>
+            </select>
+            <label>Forma Avatar</label>
+            <select id="pShape">
+              <option value="circle">Circulo</option>
+              <option value="rounded">Arredondado</option>
+              <option value="square">Quadrado</option>
+            </select>
+            <label class="toggle"><input type="checkbox" id="pBold"><span class="slider"></span>Negrito</label>
+            <label class="toggle"><input type="checkbox" id="pVisible"><span class="slider"></span>Visivel</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-placeholders">
+      <div class="panel-header"><h2>🏷️ Placeholders</h2></div>
+      <div class="card">
+        <div class="placeholder-grid">
+          <div class="ph-item"><code>{user}</code><span>Menciona @user</span></div>
+          <div class="ph-item"><code>{username}</code><span>Nome do user</span></div>
+          <div class="ph-item"><code>{userid}</code><span>ID do user</span></div>
+          <div class="ph-item"><code>{membercount}</code><span>Total membros</span></div>
+          <div class="ph-item"><code>{server}</code><span>Nome servidor</span></div>
+          <div class="ph-item"><code>{rules}</code><span>Canal regras</span></div>
+          <div class="ph-item"><code>{discriminator}</code><span>#0000 (na imagem)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-exportar">
+      <div class="panel-header"><h2>📤 Exportar / Importar</h2></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>📋 Exportar</h3>
+          <textarea id="exportArea" rows="15" readonly></textarea>
+          <button id="btnCopy" class="btn-primary">📋 Copiar JSON</button>
+        </div>
+        <div class="card">
+          <h3>📥 Importar</h3>
+          <textarea id="importArea" rows="10" placeholder="Cole JSON aqui..."></textarea>
+          <button id="btnImport" class="btn-primary">📥 Importar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

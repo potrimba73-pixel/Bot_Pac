@@ -1,0 +1,15 @@
+{
+  "name": "pac-dashboard-pro",
+  "version": "2.0.0",
+  "description": "PAC Dashboard com Editor Visual Pro",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "form-data": "^4.0.0",
+    "@napi-rs/canvas": "^0.1.44",
+    "node-fetch": "^2.7.0"
+  },
+  "engines": { "node": ">=18.0.0" }
+}
